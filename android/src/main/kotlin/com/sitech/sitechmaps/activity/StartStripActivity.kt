@@ -849,7 +849,7 @@ class StartStripActivity : AppCompatActivity() {
         val thread = Thread {
 
             try {
-                val (request, response, result) = "https://2698-41-36-188-38.eu.ngrok.io/trip/start"
+                val (request, response, result) = "https://3493-41-36-188-38.eu.ngrok.io/trip/start"
                     .httpPut().jsonBody("[{\"id\":\"${tripId}\"}]").
                     appendHeader("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzQ0OTI1MTAsImV4cCI6MTcwNjAyODUxMCwiYXVkIjoid3d3LnNpdGVjaC5tZSIsInN1YiI6ImxvYXlAc2l0ZWNoLm1lIiwidXNlcm5hbWUiOiJMb2F5QW1hcmEiLCJlbWFpbCI6ImxvYXlAc2l0ZWNoLm1lIiwicm9sZXMiOlsiTWFuYWdlciIsIlNhbGVzIl19.kE0JTwP-3IzduDnOd66YjxA6siWtYrXLiAfYKbjQ5sc")
                     .appendHeader( "Content-Type","application/json").responseString()
@@ -881,7 +881,7 @@ class StartStripActivity : AppCompatActivity() {
 
        val  thread = Thread{
            try {
-               val (request, response, result) = "https://2698-41-36-188-38.eu.ngrok.io/trip/complete"
+               val (request, response, result) = "https://3493-41-36-188-38.eu.ngrok.io/trip/complete"
                    .httpPut().jsonBody("{\"trips\":[\"${tripId}\"]}").
                    appendHeader("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzQ0OTI1MTAsImV4cCI6MTcwNjAyODUxMCwiYXVkIjoid3d3LnNpdGVjaC5tZSIsInN1YiI6ImxvYXlAc2l0ZWNoLm1lIiwidXNlcm5hbWUiOiJMb2F5QW1hcmEiLCJlbWFpbCI6ImxvYXlAc2l0ZWNoLm1lIiwicm9sZXMiOlsiTWFuYWdlciIsIlNhbGVzIl19.kE0JTwP-3IzduDnOd66YjxA6siWtYrXLiAfYKbjQ5sc")
                    .appendHeader( "Content-Type","application/json").responseString()
