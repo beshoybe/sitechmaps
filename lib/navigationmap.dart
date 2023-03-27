@@ -26,11 +26,15 @@ class SitechNavigationOptions {
   final TripPoint currentLocation;
   final bool tripStarted;
   final TripDetails tripDetails;
+  final String baseUrl;
+  final String token;
   SitechNavigationOptions(
       {required this.startPoint,
       required this.endPoint,
       required this.currentLocation,
       required this.tripStarted,
+      required this.baseUrl,
+      required this.token,
       required this.tripDetails});
 
   Map<String, dynamic> toMap() {
@@ -39,7 +43,9 @@ class SitechNavigationOptions {
       "endPoint": endPoint.toMap(),
       "tripDetails": tripDetails.toMap(),
       "tripStarted": tripStarted,
-      "currentPoint": currentLocation.toMap()
+      "currentPoint": currentLocation.toMap(),
+      "baseUrl": baseUrl,
+      "token": token
     };
   }
 }

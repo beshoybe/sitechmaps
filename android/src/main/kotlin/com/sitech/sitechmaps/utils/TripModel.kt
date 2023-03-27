@@ -17,6 +17,8 @@ class NavigationModel(private val navArgs:Map<*,*>) {
      val  currentLong = currentPoint["Longitude"] as Double
      val tripDetails= TripModel(navArgs["tripDetails"] as Map<*, *>)
      val tripStarted=navArgs["tripStarted"] as Boolean
+     val baseUrl = navArgs["baseUrl"] as String
+     val token = navArgs["token"] as String
 }
 
 class TripModel(private val tripDetails:Map<*,*>){

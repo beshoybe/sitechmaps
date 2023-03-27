@@ -119,6 +119,8 @@ class StartStripActivity : AppCompatActivity() {
        private lateinit var sheetBehavior :BottomSheetBehavior<LinearLayout>
        var tripStarted=false;
         lateinit var  navParameters:NavigationModel
+        lateinit var  baseUrl: String
+        lateinit var token: String
 
     }
 
@@ -402,12 +404,12 @@ class StartStripActivity : AppCompatActivity() {
                 mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="Start Journey"
                 mBottomSheetLayout.findViewById<Button>(R.id.Button1).isClickable=true
                 mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
-                    startTripApi(this, ::startTrip, navParameters.tripDetails.tripId)
+                    startTripApi(this, ::startTrip, navParameters.tripDetails.tripId, baseUrl, token)
                 }
                 mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="Start Journey"
                 mBottomSheetLayout.findViewById<Button>(R.id.Button2).isClickable=true
                 mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
-                    startTripApi(this, ::startTrip, navParameters.tripDetails.tripId)
+                    startTripApi(this, ::startTrip, navParameters.tripDetails.tripId, baseUrl,token)
                 }
 
             }
@@ -500,6 +502,8 @@ class StartStripActivity : AppCompatActivity() {
         setContentView(binding.root)
         val parameters= intent.extras?.getSerializable("navArgs") as Map<*,*>;
         navParameters = NavigationModel(parameters)
+        baseUrl = navParameters.baseUrl
+        token = navParameters.token
         println(navParameters.tripDetails.tripId)
         initLocation(Point.fromLngLat(navParameters.currentLong,navParameters.currentLat))
         tripStarted= navParameters.tripStarted
@@ -654,11 +658,11 @@ class StartStripActivity : AppCompatActivity() {
         if(tripStarted){
             mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
             mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
-                endTripApi(this, ::endTrip, navParameters.tripDetails.tripId)
+                endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
             }
             mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
             mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
-                endTripApi(this, ::endTrip, navParameters.tripDetails.tripId)
+                endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
             }
             Timer("startNavigation", false).schedule(500) {
                 findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
@@ -832,26 +836,26 @@ class StartStripActivity : AppCompatActivity() {
         tripStarted=true
         mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
         mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
-            endTripApi(this, ::endTrip, navParameters.tripDetails.tripId)
+            endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
 
         }
         mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
         mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
-            endTripApi(this, ::endTrip, navParameters.tripDetails.tripId)
+            endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
 
         }
     }
     private fun endTrip(){
         finish()
     }
-    fun startTripApi(context: Context, onComplete:()->Unit, tripId: String){
+    fun startTripApi(context: Context, onComplete:()->Unit, tripId: String,baseUrl:String,token:String){
 
         val thread = Thread {
 
             try {
-                val (request, response, result) = "https://3493-41-36-188-38.eu.ngrok.io/trip/start"
-                    .httpPut().jsonBody("[{\"id\":\"${tripId}\"}]").
-                    appendHeader("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzQ0OTI1MTAsImV4cCI6MTcwNjAyODUxMCwiYXVkIjoid3d3LnNpdGVjaC5tZSIsInN1YiI6ImxvYXlAc2l0ZWNoLm1lIiwidXNlcm5hbWUiOiJMb2F5QW1hcmEiLCJlbWFpbCI6ImxvYXlAc2l0ZWNoLm1lIiwicm9sZXMiOlsiTWFuYWdlciIsIlNhbGVzIl19.kE0JTwP-3IzduDnOd66YjxA6siWtYrXLiAfYKbjQ5sc")
+                val (request, response, result) = "$baseUrl/trip/start"
+                    .httpPut().jsonBody("{\"trips\":[\"${tripId}\"]}").
+                    appendHeader("Authorization",token)
                     .appendHeader( "Content-Type","application/json").responseString()
                 println(request)
                 println(response)
@@ -877,13 +881,13 @@ class StartStripActivity : AppCompatActivity() {
 
         thread.start()
     }
-    fun endTripApi(context: Context, onComplete:()->Unit, tripId:String){
+    fun endTripApi(context: Context, onComplete:()->Unit, tripId:String,baseUrl:String,token:String){
 
        val  thread = Thread{
            try {
-               val (request, response, result) = "https://3493-41-36-188-38.eu.ngrok.io/trip/complete"
+               val (request, response, result) = "$baseUrl/trip/complete"
                    .httpPut().jsonBody("{\"trips\":[\"${tripId}\"]}").
-                   appendHeader("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzQ0OTI1MTAsImV4cCI6MTcwNjAyODUxMCwiYXVkIjoid3d3LnNpdGVjaC5tZSIsInN1YiI6ImxvYXlAc2l0ZWNoLm1lIiwidXNlcm5hbWUiOiJMb2F5QW1hcmEiLCJlbWFpbCI6ImxvYXlAc2l0ZWNoLm1lIiwicm9sZXMiOlsiTWFuYWdlciIsIlNhbGVzIl19.kE0JTwP-3IzduDnOd66YjxA6siWtYrXLiAfYKbjQ5sc")
+                   appendHeader("Authorization",token)
                    .appendHeader( "Content-Type","application/json").responseString()
                println(request)
                println(response)
