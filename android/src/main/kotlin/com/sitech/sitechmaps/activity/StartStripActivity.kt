@@ -313,27 +313,7 @@ class StartStripActivity : AppCompatActivity() {
 
         override fun onNewRawLocation(rawLocation: Location) {
 
-            val enhancedLocation = rawLocation
-            // update location puck's position on the map
-            navigationLocationProvider.changePosition(
-                location = enhancedLocation,
 
-            )
-
-            // update camera position to account for new location
-            viewportDataSource.onLocationChanged(enhancedLocation)
-            viewportDataSource.evaluate()
-
-            // if this is the first location update the activity has received,
-            // it's best to immediately move the camera to the current user location
-            if (!firstLocationUpdateReceived) {
-                firstLocationUpdateReceived = true
-                navigationCamera.requestNavigationCameraToOverview(
-                    stateTransitionOptions = NavigationCameraTransitionOptions.Builder()
-                        .maxDuration(0) // instant transition
-                        .build()
-                )
-            }
         }
 
         override fun onNewLocationMatcherResult(locationMatcherResult: LocationMatcherResult) {
@@ -698,7 +678,7 @@ class StartStripActivity : AppCompatActivity() {
             NavigationOptions.Builder(this)
                 .accessToken(getString(R.string.mapbox_access_token))
                 // comment out the location engine setting block to disable simulation
-                .locationEngine(replayLocationEngine)
+                //.locationEngine(replayLocationEngine)
                 .build()
         )
     }
@@ -749,6 +729,9 @@ class StartStripActivity : AppCompatActivity() {
                 .applyDefaultNavigationOptions()
                 .applyLanguageAndVoiceUnitOptions(this)
                 .coordinatesList(listOf(originPoint, destination))
+                .alternatives(true)
+                .annotations(DirectionsCriteria.ANNOTATION_DISTANCE)
+
                 // provide the bearing for the origin of the request to ensure
                 // that the returned route faces in the direction of the current user movement
                 .bearingsList(
@@ -875,7 +858,9 @@ class StartStripActivity : AppCompatActivity() {
 
             }  catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(context, "Error Occurred", Toast.LENGTH_SHORT).show()
+                runOnUiThread {
+                    Toast.makeText(context, "Error Occurred", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -908,7 +893,9 @@ class StartStripActivity : AppCompatActivity() {
 
            }  catch (e: Exception) {
                e.printStackTrace()
-               Toast.makeText(context, "Error Occurred", Toast.LENGTH_SHORT).show()
+               runOnUiThread {
+                   Toast.makeText(context, "Error Occurred", Toast.LENGTH_SHORT).show()
+               }
            }
        }
         thread.start()
