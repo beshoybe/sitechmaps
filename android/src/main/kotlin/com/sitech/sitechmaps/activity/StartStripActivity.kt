@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -28,7 +29,6 @@ import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.Style
-import com.mapbox.maps.StyleManager
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -640,12 +640,10 @@ class StartStripActivity : AppCompatActivity() {
         if(tripStarted){
             mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
             mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
-                endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
-            }
+                showAlertDialog()            }
             mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
             mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
-                endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
-            }
+                showAlertDialog()            }
             Timer("startNavigation", false).schedule(500) {
                 findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
             }
@@ -658,6 +656,7 @@ class StartStripActivity : AppCompatActivity() {
                 mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="Navigating to start point"
                 mBottomSheetLayout.findViewById<Button>(R.id.Button2).isClickable=false
             }
+            showAlertDialog()
 
 
         }
@@ -821,17 +820,33 @@ class StartStripActivity : AppCompatActivity() {
         tripStarted=true
         mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
         mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
-            endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
-
+            showAlertDialog()
         }
         mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
         mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
-            endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
-
+            showAlertDialog()
         }
     }
     private fun endTrip(){
         finish()
+    }
+    fun showAlertDialog(){
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+        // set the custom layout
+
+        // set the custom layout
+        val customLayout: View = layoutInflater.inflate(R.layout.alert_dialog, null)
+        val dialog: android.app.AlertDialog = builder.create()
+
+        customLayout.findViewById<Button>(R.id.YesButton).setOnClickListener {
+            endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
+
+        }
+        customLayout.findViewById<Button>(R.id.NoButton).setOnClickListener {
+            dialog.cancel()
+        }
+        builder.setView(customLayout)
+        dialog.show()
     }
     fun startTripApi(context: Context, onComplete:()->Unit, tripId: String,baseUrl:String,token:String){
 

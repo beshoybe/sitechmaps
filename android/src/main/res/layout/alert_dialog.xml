@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/alert_dialog"
+    android:layout_width="328dp"
+    android:layout_height="wrap_content"
+    android:background="#FFF"
+    android:padding="10dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".activity.StartStripActivity">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="23dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/alert_icon" />
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:text="End the journey?"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:fontFamily="@font/oxygen_bold"
+        android:textFontWeight="700"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_marginTop="27.5dp"
+        android:layout_width="wrap_content"
+        android:text="Do you want to end the journey?"
+        android:textSize="14sp"
+        android:textColor="#7E909A"
+        android:fontFamily="@font/oxygen_regular"
+        android:textFontWeight="700"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/YesButton"
+        android:layout_width="match_parent"
+        android:background="@drawable/button_backround"
+        android:text="Yes"
+        android:animateLayoutChanges="true"
+        android:layout_marginTop="15dp"
+        android:minHeight="0dip"
+        android:minWidth="0dip"
+        android:textSize="16sp"
+        android:fontFamily="@font/oxygen_bold"
+        android:textColor="#FFF"
+        android:paddingVertical="12.5dp"
+        android:layout_height="48dp"/>
+    <Button
+        android:id="@+id/NoButton"
+        android:layout_width="match_parent"
+        android:background="@drawable/button_backround2"
+        android:text="No"
+        android:animateLayoutChanges="true"
+        android:layout_marginTop="15dp"
+        android:minHeight="0dip"
+        android:minWidth="0dip"
+        android:textSize="16sp"
+        android:fontFamily="@font/oxygen_bold"
+        android:textColor="#606EB2"
+        android:paddingVertical="12.5dp"
+        android:layout_height="48dp"/>
+</LinearLayout>
