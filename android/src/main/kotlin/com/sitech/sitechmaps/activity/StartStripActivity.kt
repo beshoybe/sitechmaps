@@ -27,6 +27,8 @@ import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.Style
+import com.mapbox.maps.StyleManager
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -595,7 +597,7 @@ class StartStripActivity : AppCompatActivity() {
         routeArrowView = MapboxRouteArrowView(routeArrowOptions)
 
         // load map style
-        binding.mapView.getMapboxMap().loadStyleUri("https://ksamaps.com/api/style?key=5d95b6b05f37250076da7ee5223c1ff2360244b57d54035c71cbb7926175da88f2e2f548c29d9d0415ca03a1ca79486fcf0dde16570ac363241e7af681166f1a&style=mobile")
+        binding.mapView.getMapboxMap().loadStyleUri(Style.TRAFFIC_DAY)
 
 
         binding.recenter.setOnClickListener {
