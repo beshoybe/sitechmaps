@@ -656,7 +656,6 @@ class StartStripActivity : AppCompatActivity() {
                 mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="Navigating to start point"
                 mBottomSheetLayout.findViewById<Button>(R.id.Button2).isClickable=false
             }
-            showAlertDialog()
 
 
         }
