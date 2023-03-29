@@ -238,12 +238,14 @@
                     android:layout_weight="0.25"
                     android:singleLine="true"
                     android:textColor="#313644"
+                    android:maxLines="1"
                     android:fontFamily="@font/oxygen_bold"
                     android:layout_height="wrap_content"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_weight="0.5"
                     android:adjustViewBounds="true"
+
                     android:layout_height="wrap_content"
                     android:src="@drawable/route_photo" />
                 <TextView
@@ -251,6 +253,7 @@
                     android:layout_width="wrap_content"
                     android:text="Jeddah"
                     android:singleLine="true"
+                    android:maxLines="1"
                     android:layout_weight="0.25"
                     android:textSize="12sp"
                     android:textColor="#313644"

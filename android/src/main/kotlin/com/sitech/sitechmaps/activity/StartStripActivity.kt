@@ -830,12 +830,14 @@ class StartStripActivity : AppCompatActivity() {
         finish()
     }
     fun showAlertDialog(){
-        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         // set the custom layout
 
         // set the custom layout
         val customLayout: View = layoutInflater.inflate(R.layout.alert_dialog, null)
-        val dialog: android.app.AlertDialog = builder.create()
+        builder.setView(customLayout)
+
+        val dialog: AlertDialog = builder.create()
 
         customLayout.findViewById<Button>(R.id.YesButton).setOnClickListener {
             endTripApi(this, ::endTrip, navParameters.tripDetails.tripId, baseUrl, token)
@@ -844,7 +846,6 @@ class StartStripActivity : AppCompatActivity() {
         customLayout.findViewById<Button>(R.id.NoButton).setOnClickListener {
             dialog.cancel()
         }
-        builder.setView(customLayout)
         dialog.show()
     }
     fun startTripApi(context: Context, onComplete:()->Unit, tripId: String,baseUrl:String,token:String){
