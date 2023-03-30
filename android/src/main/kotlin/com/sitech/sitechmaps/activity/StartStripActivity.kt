@@ -498,6 +498,9 @@ class StartStripActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.makeCall).setOnClickListener {
             makePhoneCall(navParameters.tripDetails.clientNumber)
         }
+        findViewById<ImageView>(R.id.chat).setOnClickListener {
+            whatsappMessage(navParameters.tripDetails.clientNumber)
+        }
         if (ContextCompat.checkSelfPermission(this@StartStripActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION) !=
             PackageManager.PERMISSION_GRANTED) {
@@ -921,5 +924,9 @@ class StartStripActivity : AppCompatActivity() {
         val dialIntent = Intent(Intent.ACTION_DIAL)
         dialIntent.data = Uri.parse("tel:$num")
         startActivity(dialIntent)
+    }
+    fun whatsappMessage(num:String){
+        val chatIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/$num"))
+        startActivity(chatIntent)
     }
 }
