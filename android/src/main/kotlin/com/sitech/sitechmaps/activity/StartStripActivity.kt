@@ -647,12 +647,12 @@ class StartStripActivity : AppCompatActivity() {
             mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
             mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
                 showAlertDialog()            }
-            Timer("startNavigation", false).schedule(500) {
+            Timer("startNavigation", false).schedule(1500) {
                 findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
             }
 
         }else{
-            Timer("startNavigation", false).schedule(500) {
+            Timer("startNavigation", false).schedule(1500) {
                 findRoute(Point.fromLngLat(navParameters.startLong,navParameters.startLat))
                 mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="Navigating to start point"
                 mBottomSheetLayout.findViewById<Button>(R.id.Button1).isClickable=false

@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="6dp"
-                    android:text="19 Min"
+                    android:text="-- Min"
                     android:fontFamily="@font/oxygen_bold"
 
                     android:textColor="#000"
@@ -75,7 +75,7 @@
                     android:layout_marginRight="6dp"
                     android:fontFamily="@font/oxygen_regular"
 
-                    android:text="1.5 KM"
+                    android:text="-- KM"
                     android:textColor="#7E909A"
                     android:textFontWeight="400"
                     android:textSize="12sp" />
