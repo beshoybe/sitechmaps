@@ -70,11 +70,11 @@ class SitechmapsPlugin: FlutterPlugin, MethodCallHandler,ActivityAware{
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-    resultMethod.success("Finished native nav")
+    TODO("Not yet implemented")
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    currentActivity = binding.activity
+    TODO("Not yet implemented")
   }
 
   override fun onDetachedFromActivity() {
