@@ -34,6 +34,7 @@ import io.flutter.embedding.engine.plugins.lifecycle.HiddenLifecycleReference
 import io.flutter.plugin.platform.PlatformView
 import java.io.Serializable
 import java.util.*
+import kotlin.math.log
 
 internal class NavigationView(context: Context,creationParams: Map<String?, Any?>?,private val id:Int,activity:Activity): PlatformView
      {
@@ -50,7 +51,8 @@ internal class NavigationView(context: Context,creationParams: Map<String?, Any?
         return  view.root
     }
     override fun dispose() {
-        TODO("Not yet implemented")
+        println("Reattached")
+
     }
     init {
         view = TripSummaryBinding.inflate(activity.layoutInflater)
