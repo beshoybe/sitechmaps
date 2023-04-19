@@ -21,4 +21,9 @@ class PluginUtilities {
             }
             return context.getString(stringRes)
         }
+        var distance = 0.00
+        var time = 0.00
+        var activityStarted=false
+        var tripStatus = "pending"
+
     }}

@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 
 class SitechNavigationMap extends StatelessWidget {
   final SitechNavigationOptions options;
-  const SitechNavigationMap({super.key, required this.options});
+  final double height;
+  const SitechNavigationMap(
+      {super.key, required this.options, this.height = 70});
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +13,14 @@ class SitechNavigationMap extends StatelessWidget {
     // Pass parameters to the platform side.
     final Map<String, dynamic> creationParams = <String, dynamic>{};
 
-    return AndroidView(
-      viewType: viewType,
-      layoutDirection: TextDirection.ltr,
-      creationParams: options.toMap(),
-      creationParamsCodec: const StandardMessageCodec(),
+    return SizedBox(
+      height: height,
+      child: AndroidView(
+        viewType: viewType,
+        layoutDirection: TextDirection.ltr,
+        creationParams: options.toMap(),
+        creationParamsCodec: const StandardMessageCodec(),
+      ),
     );
   }
 }

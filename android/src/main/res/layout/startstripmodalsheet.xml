@@ -357,6 +357,7 @@
         </LinearLayout>
     </LinearLayout>
     <Button
+
         android:minHeight="0dip"
         android:minWidth="0dip"
         android:id="@+id/Button2"

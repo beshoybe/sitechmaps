@@ -44,13 +44,16 @@ class SitechmapsPlugin: FlutterPlugin, MethodCallHandler,ActivityAware{
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "sitechmaps")
     channel.setMethodCallHandler(this)
-    flutterPluginBinding.platformViewRegistry.registerViewFactory("navigationmap",NavigationViewFactory())
+    platformViewRegistry=flutterPluginBinding.platformViewRegistry
   }
 
   override  fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    }else if(call.method=="startNavigation"){
+    }else if(call.method=="tripSummary"){
+
+    }
+    else if(call.method=="startNavigation"){
       currentActivity?.let {
         Launcher.startNavigation(it,call.arguments as Map<*, *>,result)
         resultMethod=result
@@ -67,6 +70,7 @@ class SitechmapsPlugin: FlutterPlugin, MethodCallHandler,ActivityAware{
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     currentActivity = binding.activity
+   platformViewRegistry!!. registerViewFactory("navigationmap",NavigationViewFactory(binding.activity))
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -74,7 +78,8 @@ class SitechmapsPlugin: FlutterPlugin, MethodCallHandler,ActivityAware{
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
+    currentActivity = binding.activity
+    platformViewRegistry!!. registerViewFactory("navigationmap",NavigationViewFactory(binding.activity))
   }
 
   override fun onDetachedFromActivity() {

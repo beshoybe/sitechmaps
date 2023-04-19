@@ -31,6 +31,7 @@ import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.camera
+import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.navigation.base.TimeFormat
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
@@ -83,9 +84,9 @@ import com.mapbox.navigation.ui.voice.model.SpeechVolume
 import com.sitech.sitechmaps.R
 import com.sitech.sitechmaps.databinding.NavigationBinding
 import com.sitech.sitechmaps.utils.NavigationModel
+import com.sitech.sitechmaps.utils.PluginUtilities
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.concurrent.schedule
 
 
 /**
@@ -381,6 +382,11 @@ class StartStripActivity : AppCompatActivity() {
         val result2:TripProgressUpdateValue=tripProgressApi.getTripProgress(routeProgress)
         val  df =  DecimalFormat("#.##")
         val disRemain =df.format(result2.distanceRemaining/1000)
+        if(PluginUtilities.distance==0.00){
+            PluginUtilities.distance=result2.distanceRemaining/1000
+        }else{
+            PluginUtilities.distance=PluginUtilities.distance-result2.distanceRemaining/1000
+        }
         if (disRemain.toDouble()<=1.0) {
             if (!tripStarted){
                 mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="Start Journey"
@@ -400,6 +406,7 @@ class StartStripActivity : AppCompatActivity() {
         if (disRemain.toDouble()==0.0)
             clearRouteAndStopNavigation()
         remainingDistance.text= "$disRemain km"
+
         if ((result2.totalTimeRemaining/60).toInt()>60){
             val decimalTime = df.format(result2.totalTimeRemaining/3600).toDouble()
             val hours = decimalTime.toInt()
@@ -487,8 +494,11 @@ class StartStripActivity : AppCompatActivity() {
         baseUrl = navParameters.baseUrl
         token = navParameters.token
         println(navParameters.tripDetails.tripId)
-        initLocation(Point.fromLngLat(navParameters.currentLong,navParameters.currentLat))
         tripStarted= navParameters.tripStarted
+        PluginUtilities.activityStarted=true
+        if(tripStarted){
+            PluginUtilities.tripStatus="started"
+        }
         findViewById<TextView>(R.id.fullDestination).text= navParameters.endName
         findViewById<TextView>(R.id.sourceText).text= navParameters.startName.split(",").last()
         findViewById<TextView>(R.id.destinationText).text= navParameters.endName.split(",").last()
@@ -590,7 +600,8 @@ class StartStripActivity : AppCompatActivity() {
         // the value of this option will depend on the style that you are using
         // and under which layer the route line should be placed on the map layers stack
         val mapboxRouteLineOptions = MapboxRouteLineOptions.Builder(this)
-            .withRouteLineBelowLayerId("road-label-navigation")
+            .withRouteLineBelowLayerId("road-label-navigation").withRouteLineBelowLayerId(
+                LocationComponentConstants.LOCATION_INDICATOR_LAYER)
             .build()
         routeLineApi = MapboxRouteLineApi(mapboxRouteLineOptions)
         routeLineView = MapboxRouteLineView(mapboxRouteLineOptions)
@@ -598,7 +609,6 @@ class StartStripActivity : AppCompatActivity() {
         // initialize maneuver arrow view to draw arrows on the map
         val routeArrowOptions = RouteArrowOptions.Builder(this).build()
         routeArrowView = MapboxRouteArrowView(routeArrowOptions)
-
         // load map style
         binding.mapView.getMapboxMap().loadStyleUri(Style.TRAFFIC_DAY)
 
@@ -606,6 +616,7 @@ class StartStripActivity : AppCompatActivity() {
         binding.recenter.setOnClickListener {
             navigationCamera.requestNavigationCameraToFollowing()
             binding.routeOverview.showTextAndExtend(BUTTON_ANIMATION_DURATION)
+
         }
         binding.routeOverview.setOnClickListener {
             navigationCamera.requestNavigationCameraToOverview()
@@ -618,6 +629,7 @@ class StartStripActivity : AppCompatActivity() {
 
         // set initial sounds button state
         binding.soundButton.unmute()
+
         mBottomSheetLayout = findViewById(R.id.bottom_sheet_layout);
         Glide.with(this).load("https://www.topgear.com/sites/default/files/2022/07/6_0.jpg").into(mBottomSheetLayout.findViewById(R.id.vehicleImage));
 
@@ -639,29 +651,31 @@ class StartStripActivity : AppCompatActivity() {
                 }
             }
         })
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                if(tripStarted){
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
+                        showAlertDialog()            }
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
+                        showAlertDialog()            }
+                    findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
 
-        if(tripStarted){
-            mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
-            mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
-                showAlertDialog()            }
-            mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
-            mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
-                showAlertDialog()            }
-            Timer("startNavigation", false).schedule(1500) {
-                findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
+
+                }else{
+                    findRoute(Point.fromLngLat(navParameters.startLong,navParameters.startLat))
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="Navigating to start point"
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button1).isClickable=false
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="Navigating to start point"
+                    mBottomSheetLayout.findViewById<Button>(R.id.Button2).isClickable=false
+
+
+                }
             }
-
-        }else{
-            Timer("startNavigation", false).schedule(1500) {
-                findRoute(Point.fromLngLat(navParameters.startLong,navParameters.startLat))
-                mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="Navigating to start point"
-                mBottomSheetLayout.findViewById<Button>(R.id.Button1).isClickable=false
-                mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="Navigating to start point"
-                mBottomSheetLayout.findViewById<Button>(R.id.Button2).isClickable=false
-            }
+        }, 2000)
 
 
-        }
 
 
     }
@@ -689,12 +703,14 @@ class StartStripActivity : AppCompatActivity() {
         // initialize location puck
         binding.mapView.location.apply {
             setLocationProvider(navigationLocationProvider)
+
             this.locationPuck = LocationPuck2D(
                 bearingImage = ContextCompat.getDrawable(
                     this@StartStripActivity,
                     R.drawable.mapbox_navigation_puck_icon
                 )
             )
+
             enabled = true
         }
 
@@ -770,8 +786,10 @@ class StartStripActivity : AppCompatActivity() {
     private fun setRouteAndStartNavigation(routes: List<NavigationRoute>) {
         // set routes, where the first route in the list is the primary route that
         // will be used for active guidance
+
         mapboxReplayer.play()
         mapboxNavigation.setNavigationRoutes(routes)
+        initLocation(Point.fromLngLat(navParameters.currentLong,navParameters.currentLat))
 
         // show UI elements
         binding.soundButton.visibility = View.VISIBLE
@@ -820,6 +838,7 @@ class StartStripActivity : AppCompatActivity() {
         clearRouteAndStopNavigation()
         findRoute(Point.fromLngLat(navParameters.endLong, navParameters.endLat))
         tripStarted=true
+        PluginUtilities.tripStatus="started"
         mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
         mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
             showAlertDialog()
@@ -929,4 +948,14 @@ class StartStripActivity : AppCompatActivity() {
         val chatIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/$num"))
         startActivity(chatIntent)
     }
+
+    override fun onBackPressed() {
+        if(tripStarted){
+            showAlertDialog()
+        }else{
+            finish()
+        }
+
+    }
+
 }
