@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             SitechNavigationOptions(
                 currentLocation:
                     TripPoint(latitude: 24.7136, lonngitude: 46.6768),
-                tripStarted: false,
+                tripStarted: true,
                 startPoint: TripPoint(
                     latitude: 24.7136, lonngitude: 46.6753, name: "Ryadah"),
                 endPoint: TripPoint(

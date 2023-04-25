@@ -85,6 +85,7 @@ import com.sitech.sitechmaps.R
 import com.sitech.sitechmaps.databinding.NavigationBinding
 import com.sitech.sitechmaps.utils.NavigationModel
 import com.sitech.sitechmaps.utils.PluginUtilities
+import java.sql.Time
 import java.text.DecimalFormat
 import java.util.*
 
@@ -120,10 +121,11 @@ class StartStripActivity : AppCompatActivity() {
         private const val BUTTON_ANIMATION_DURATION = 1500L
         lateinit var  mBottomSheetLayout: LinearLayout
        private lateinit var sheetBehavior :BottomSheetBehavior<LinearLayout>
-       var tripStarted=false;
+       var tripStarted=false
         lateinit var  navParameters:NavigationModel
         lateinit var  baseUrl: String
         lateinit var token: String
+        var timer = Timer()
 
     }
 
@@ -487,10 +489,11 @@ class StartStripActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = NavigationBinding.inflate(layoutInflater)
+         binding = NavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val parameters= intent.extras?.getSerializable("navArgs") as Map<*,*>;
         navParameters = NavigationModel(parameters)
+        timer=Timer()
         baseUrl = navParameters.baseUrl
         token = navParameters.token
         println(navParameters.tripDetails.tripId)
@@ -651,16 +654,17 @@ class StartStripActivity : AppCompatActivity() {
                 }
             }
         })
-        Timer().schedule(object : TimerTask() {
+        timer.schedule(object : TimerTask() {
             override fun run() {
                 if(tripStarted){
+                    findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
+
                     mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
                     mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
                         showAlertDialog()            }
                     mBottomSheetLayout.findViewById<Button>(R.id.Button2).text="End Journey"
                     mBottomSheetLayout.findViewById<Button>(R.id.Button2).setOnClickListener {
                         showAlertDialog()            }
-                    findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
 
 
                 }else{
@@ -954,6 +958,12 @@ class StartStripActivity : AppCompatActivity() {
             showAlertDialog()
         }else{
             finish()
+           timer.cancel()
+            maneuverApi.cancel()
+            routeLineApi.cancel()
+            routeLineView.cancel()
+            speechApi.cancel()
+            voiceInstructionsPlayer.shutdown()
         }
 
     }
