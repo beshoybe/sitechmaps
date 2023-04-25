@@ -12,6 +12,7 @@ import com.sitech.sitechmaps.databinding.TripSummaryBinding
 import com.sitech.sitechmaps.utils.PluginUtilities
 import io.flutter.plugin.platform.PlatformView
 import java.io.Serializable
+import java.text.DecimalFormat
 import java.util.*
 
 @SuppressLint("SuspiciousIndentation")
@@ -20,6 +21,7 @@ internal class NavigationView(context: Context, creationParams: Map<String?, Any
     private  val  context:Context = context
     private val creationParams=creationParams
     private  val activity:Activity=activity
+         val df = DecimalFormat("#.##")
    var  view:TripSummaryBinding
    var timer:Timer=Timer()
     override fun getView(): View? {
@@ -48,10 +50,10 @@ internal class NavigationView(context: Context, creationParams: Map<String?, Any
                                PluginUtilities.distance.toString()
                            if (PluginUtilities.time / 3600 >= 1) {
                                view.root.findViewById<TextView>(R.id.travelledTime).text =
-                                   "${PluginUtilities.time / 3600} Hours"
+                                   "${df.format(PluginUtilities.time / 3600)} Hours"
                            } else {
                                view.root.findViewById<TextView>(R.id.travelledTime).text =
-                                   "${PluginUtilities.time / 60} Min"
+                                   "${df.format(PluginUtilities.time / 60)} Min"
                            }
                            println("Timer is ${PluginUtilities.time}")
                        }
