@@ -27,7 +27,7 @@ internal class NavigationView(context: Context, creationParams: Map<String?, Any
 
         val intent = Intent(context,StartStripActivity::class.java)
         intent.putExtra("navArgs",creationParams as Serializable)
-        activity.startActivity(intent)
+        
         return  view.root
     }
     override fun dispose() {
