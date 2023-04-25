@@ -46,7 +46,7 @@ internal class NavigationView(context: Context, creationParams: Map<String?, Any
                            PluginUtilities.time += 1.0
                            view.root.findViewById<TextView>(R.id.travelledDistance).text =
                                PluginUtilities.distance.toString()
-                           if (PluginUtilities.time / 3600 > 0) {
+                           if (PluginUtilities.time / 3600 >= 1) {
                                view.root.findViewById<TextView>(R.id.travelledTime).text =
                                    "${PluginUtilities.time / 3600} Hours"
                            } else {
