@@ -21,22 +21,23 @@ internal class NavigationView(context: Context, creationParams: Map<String?, Any
     private val creationParams=creationParams
     private  val activity:Activity=activity
    var  view:TripSummaryBinding
+   var timer:Timer=Timer()
     override fun getView(): View? {
 
 
         val intent = Intent(context,StartStripActivity::class.java)
         intent.putExtra("navArgs",creationParams as Serializable)
-
+        activity.startActivity(intent)
         return  view.root
     }
     override fun dispose() {
-        println("Reattached")
+        timer.cancel()
 
     }
     init {
         view = TripSummaryBinding.inflate(activity.layoutInflater)
 
-            Timer().scheduleAtFixedRate(object : TimerTask() {
+            timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                    activity.runOnUiThread {
                        if (PluginUtilities.tripStatus == "started") {
