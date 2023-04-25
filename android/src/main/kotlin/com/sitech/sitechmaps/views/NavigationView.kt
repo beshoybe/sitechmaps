@@ -1,5 +1,6 @@
 package com.sitech.sitechmaps.views
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -13,7 +14,8 @@ import io.flutter.plugin.platform.PlatformView
 import java.io.Serializable
 import java.util.*
 
-internal class NavigationView(context: Context,creationParams: Map<String?, Any?>?,private val id:Int,activity:Activity): PlatformView
+@SuppressLint("SuspiciousIndentation")
+internal class NavigationView(context: Context, creationParams: Map<String?, Any?>?, private val id:Int, activity:Activity): PlatformView
      {
     private  val  context:Context = context
     private val creationParams=creationParams
