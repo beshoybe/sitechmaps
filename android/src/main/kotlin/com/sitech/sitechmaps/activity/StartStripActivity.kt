@@ -686,6 +686,8 @@ class StartStripActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        PluginUtilities.tripStatus=""
+
         mapboxReplayer.finish()
         maneuverApi.cancel()
         routeLineApi.cancel()
@@ -854,6 +856,8 @@ class StartStripActivity : AppCompatActivity() {
     }
     private fun endTrip(){
         finish()
+        PluginUtilities.tripStatus=""
+
     }
     fun showAlertDialog(){
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -958,6 +962,7 @@ class StartStripActivity : AppCompatActivity() {
             showAlertDialog()
         }else{
             finish()
+            PluginUtilities.tripStatus=""
            timer.cancel()
             maneuverApi.cancel()
             routeLineApi.cancel()

@@ -34,6 +34,7 @@ internal class NavigationView(context: Context, creationParams: Map<String?, Any
         timer.cancel()
         PluginUtilities.time=0.0
         PluginUtilities.distance=0.0
+
     }
     init {
         view = TripSummaryBinding.inflate(activity.layoutInflater)
