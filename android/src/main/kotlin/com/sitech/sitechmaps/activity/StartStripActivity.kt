@@ -504,7 +504,9 @@ class StartStripActivity : AppCompatActivity() {
         }
         findViewById<TextView>(R.id.fullDestination).text= navParameters.endName
         findViewById<TextView>(R.id.sourceText).text= navParameters.startName.split(",").last()
-        findViewById<TextView>(R.id.destinationText).text= navParameters.endName.split(",").last()
+        if(navParameters.endPoint!=null){
+            findViewById<TextView>(R.id.destinationText).text= navParameters.endName!!.split(",").last()
+        }
         findViewById<TextView>(R.id.vehcileModel).text= navParameters.tripDetails.carModel
         findViewById<TextView>(R.id.plateNumber).text= navParameters.tripDetails.carPlate
         findViewById<TextView>(R.id.contactName).text= navParameters.tripDetails.clientName
@@ -654,10 +656,14 @@ class StartStripActivity : AppCompatActivity() {
                 }
             }
         })
+        initLocation(Point.fromLngLat(navParameters.currentLong,navParameters.currentLat))
+
         timer.schedule(object : TimerTask() {
             override fun run() {
                 if(tripStarted){
-                    findRoute(Point.fromLngLat(navParameters.endLong,navParameters.endLat))
+                    if(navParameters.endPoint!=null){
+                        findRoute(Point.fromLngLat(navParameters.endLong!!,navParameters.endLat!!))
+                    }
 
                     mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"
                     mBottomSheetLayout.findViewById<Button>(R.id.Button1).setOnClickListener {
@@ -795,7 +801,6 @@ class StartStripActivity : AppCompatActivity() {
 
         mapboxReplayer.play()
         mapboxNavigation.setNavigationRoutes(routes)
-        initLocation(Point.fromLngLat(navParameters.currentLong,navParameters.currentLat))
 
         // show UI elements
         binding.soundButton.visibility = View.VISIBLE
@@ -842,7 +847,9 @@ class StartStripActivity : AppCompatActivity() {
 
     private  fun  startTrip(){
         clearRouteAndStopNavigation()
-        findRoute(Point.fromLngLat(navParameters.endLong, navParameters.endLat))
+        if(navParameters.endPoint!=null){
+            findRoute(Point.fromLngLat(navParameters.endLong!!, navParameters.endLat!!))
+        }
         tripStarted=true
         PluginUtilities.tripStatus="started"
         mBottomSheetLayout.findViewById<Button>(R.id.Button1).text="End Journey"

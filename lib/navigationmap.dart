@@ -27,7 +27,7 @@ class SitechNavigationMap extends StatelessWidget {
 
 class SitechNavigationOptions {
   final TripPoint startPoint;
-  final TripPoint endPoint;
+  final TripPoint? endPoint;
   final TripPoint currentLocation;
   final bool tripStarted;
   final TripDetails tripDetails;
@@ -35,7 +35,7 @@ class SitechNavigationOptions {
   final String token;
   SitechNavigationOptions(
       {required this.startPoint,
-      required this.endPoint,
+      this.endPoint,
       required this.currentLocation,
       required this.tripStarted,
       required this.baseUrl,
@@ -45,7 +45,7 @@ class SitechNavigationOptions {
   Map<String, dynamic> toMap() {
     return {
       "startPoint": startPoint.toMap(),
-      "endPoint": endPoint.toMap(),
+      "endPoint": endPoint == null ? null : endPoint!.toMap(),
       "tripDetails": tripDetails.toMap(),
       "tripStarted": tripStarted,
       "currentPoint": currentLocation.toMap(),

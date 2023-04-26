@@ -25,8 +25,6 @@ class MyApp extends StatelessWidget {
                 tripStarted: true,
                 startPoint: TripPoint(
                     latitude: 24.7136, lonngitude: 46.6753, name: "Ryadah"),
-                endPoint: TripPoint(
-                    latitude: 24.7277, lonngitude: 46.7834, name: "Jaddah"),
                 tripDetails: TripDetails(
                   carModel: "Huyndai",
                   carPlate: "FBD 123",

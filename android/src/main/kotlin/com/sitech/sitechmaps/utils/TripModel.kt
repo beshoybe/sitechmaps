@@ -8,10 +8,10 @@ class NavigationModel(private val navArgs:Map<*,*>) {
      val startLat = startPoint["Latitude"] as Double
      val startLong = startPoint["Longitude"] as Double
      val startName = startPoint["name"] as String
-     val endPoint = navArgs["endPoint"] as HashMap<*, *>
-     val endName = endPoint["name"] as String
-     val endLat = endPoint["Latitude"] as Double
-     val endLong = endPoint["Longitude"] as Double
+     val endPoint = navArgs["endPoint"] as HashMap<*, *>?
+     val endName =  endPoint?.get("name") as String?
+     val endLat = endPoint?.get("Latitude") as Double?
+     val endLong = endPoint?.get("Longitude") as Double?
      val currentPoint = navArgs["currentPoint"] as HashMap<*,*>
      val currentLat=currentPoint["Latitude"] as Double
      val  currentLong = currentPoint["Longitude"] as Double
